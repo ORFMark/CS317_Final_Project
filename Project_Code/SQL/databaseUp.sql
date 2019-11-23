@@ -1,0 +1,41 @@
+CREATE TABLE IF NOT EXISTS people (
+  ID INT NOT NULL AUTO_INCREMENT,
+  firstName VARCHAR(32) NOT NULL,
+  lastName VARCHAR(32) NOT NULL,
+  isTutor BOOLEAN NOT NULL DEFAULT FALSE,
+  bio VARCHAR(1024),
+  PRIMARY KEY(ID));
+  
+CREATE TABLE IF NOT EXISTS courses (
+  courseCode varchar(8) NOT NULL,
+  courseName varchar(32) NOT NULL,
+  PRIMARY KEY(courseCode)
+);
+
+CREATE TABLE IF NOT EXISTS tutored (
+  tutorID int NOT NULL,
+  courseCode varchar(8) NOT NULL,
+  FOREIGN KEY(tutorID) REFERENCES people(ID) ON DELETE CASCADE,
+  FOREIGN KEY(courseCode) REFERENCES courses(courseCode) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS review (
+  tutorID int NOT NULL,
+  rating INT NOT NULL,
+  review VARCHAR(32),
+  given DATETIME DEFAULT  CURRENT_TIMESTAMP;
+  FOREIGN KEY(tutorID) REFERENCES people(ID) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS appointments
+  ID INT NOT NULL AUTO_INCREMENT,
+  startTime DATETIME NOT NULL,
+  endTime DATETIME NOT NULL,
+  offeredBy INT NOT NULL,
+  takenBy INT,
+  course varchar(8),
+  FOREIGN KEY(offeredBy) REFERENCES people(ID) ON DELETE CASCADE,
+  FOREIGN KEY(takenBy) REFERENCES people(ID) ON DELETE CASCADE,
+  FOREIGN KEY(course) REFERENCES courses(courseCode) ON DELETE CASCADE
+);
+  
