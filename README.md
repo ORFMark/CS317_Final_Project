@@ -2,7 +2,7 @@
 A tutoring scheduler developed by myself and Anna Stoneman for our files and database class. 
 This is our final project for CS317 at ERAU. The general tasks are: 
 # Tasks
-- [ ] General Database Layout
+- [x] General Database Layout
 - [ ] Hour Input functions
 - [ ] Scedchuling functions
 - [ ] command line GUI
