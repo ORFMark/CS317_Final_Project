@@ -13,19 +13,24 @@ public class TextUI {
 		String query = String.format("INSERT INTO appointments(startTime, endTime, offerdBy) VALUES (&s, %s, %d);", start.toString(), end.toString(), ID);
 		DB.runQuery(query);
 	}
+	private void displayAvalibleAppointments(String courseCode) {
+		String query = String.format("SELECT startTime, endTime from appointments where offeredBy = %D", ID);
+		DB.runQuery(query);
+	}
 	private void displayTakenAppointments() {
 		
 	}
 	private void removeBlock(LocalDateTime start, LocalDateTime end) {
 		
 	}
-	public TextUI(Scanner in, int ID, DatabaseConnector DB) {
+	public TextUI(Scanner in, DatabaseConnector DB) {
 		input = in;
-		this.ID = ID;
 		this.DB = DB;
 	}
 	public void driver() {
-	
+	    String userIn;
+	    boolean isTutor = false;
+	    System.out.print("Please enter your System ID");
 	}
 	
 	
