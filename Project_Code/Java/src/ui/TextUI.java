@@ -16,17 +16,19 @@ public class TextUI {
 		input = in;
 		this.DB = DB;
 	}
-	
+
 	private boolean auth() {
 		String query = String.format("SELECT * from people WHERE ID = %d;", ID);
 		ResultSet result = DB.runQuery(query);
+
 		try {
-			boolean empty = !result.next();
-			if (result != null && !empty) {
+			Boolean empty = !result.next();
+			if (result != null && empty == false) {
 				isTutor = result.getBoolean("isTutor");
+				System.out.println("Welcome " + result.getString("firstName") + " " + result.getString("lastName"));
 				return true;
 			} else {
-				System.out.println("RS: " + Boolean.toString(result != null) + " EMPTY: " + empty);
+				System.out.println("RS: " + Boolean.toString(result != null) + "Empty: " + Boolean.toString(empty));
 				return false;
 			}
 		} catch (SQLException e) {
@@ -54,19 +56,81 @@ public class TextUI {
 
 	}
 
+	private void displayMyAppointments() {
+
+	}
+
+	private void newAppoitnment() {
+
+	}
 
 	public void driver() {
-		String userIn;
-		System.out.print("Please enter your System ID");
+		String userIn = null;
+		boolean done = false;
+		System.out.print("Please enter your System ID: ");
 		ID = input.nextInt();
 		if (!auth()) {
 			System.out.println("Im sorry, that ID is not in the database");
 			return;
 		}
+		userIn = input.nextLine();
 		if (isTutor) {
+			while (!done) {
+				System.out.println(
+						"Do you want to to view taken appointments(t), view your appointments(v), edit appointment hours (e), scedchule an appointment(a), or quit(q): ");
+				userIn = input.nextLine();
+				switch (userIn) {
+				case "t":
+				case "T":
+					displayTakenAppointments();
+					break;
+				case "v":
+				case "V":
+					displayMyAppointments();
+					break;
+				case "e":
+				case "E":
+					// TODO: edit interface
+					break;
+				case "a":
+				case "A":
+					// TODO: new appointment interface
+					break;
+				case "q":
+				case "Q":
+					done = true;
+					System.out.println("Thanks for visting!");
+					break;
+				default:
+					System.out.println("Im sorry, that was not a valid input");
+
+				}
+			}
 
 		} else {
+			while (!done) {
+				System.out.println(
+						"Do you want to view your appointments(v),  scedchule an appointment(a), or quit(q): ");
+				userIn = input.nextLine();
+				switch (userIn) {
+				case "v":
+				case "V":
+					displayMyAppointments();
+					break;
+				case "a":
+				case "A":
+					// TODO: new appointment interface
+					break;
+				case "q":
+				case "Q":
+					done = true;
+					System.out.println("Thanks for visting!");
+					break;
+				default:
+					System.out.println("Im sorry, that was not a valid input");
 
+				}
+			}
 		}
 
 	}

@@ -51,7 +51,9 @@ public class DatabaseConnector {
 			if(database != null && !database.isClosed()) {
 				smt = database.createStatement();
 				rs = smt.executeQuery(query);
-			} 
+			} else {
+				System.out.println("Database: " + Boolean.toString(database != null) + " closed: " + Boolean.toString(database.isClosed()));
+			}
 		} catch (Exception e) {
 			System.out.print("Failed to execute querey");
 			e.printStackTrace();
