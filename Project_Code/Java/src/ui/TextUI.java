@@ -37,10 +37,19 @@ public class TextUI {
 		return false;
 	}
 
-	private void addNewBlock(LocalDateTime start, LocalDateTime end) {
-		String query = String.format("INSERT INTO appointments(startTime, endTime, offerdBy) VALUES (&s, %s, %d);",
-				start.toString(), end.toString(), ID);
-		DB.runQuery(query);
+	private void addNewBlock() {
+		String startTime = null;
+		String endTime = null;
+		String date = null;
+		System.out.print("What date do you want to add hours on (enter as yyyy-mm-dd):");
+		date = input.nextLine();
+		System.out.print("When do you want the block to start (enter as 24hour time):");
+		startTime = input.nextLine();
+		System.out.print("When do you want the block to end (enter as 24hour time):");
+		endTime = input.nextLine();
+		String query = "INSERT INTO appointments (startTime, endTime, offeredBy, takenBy, course)"
+				+ String.format("VALUES ('%s', '%s', %d, NULL, NULL);", date + " " + startTime, date + " " + endTime, ID);
+		DB.updateDatabase(query);
 	}
 
 	private void displayAvalibleAppointments(String courseCode) {
@@ -72,8 +81,30 @@ public class TextUI {
 
 	private void editAppointments() {
 		String op = null;
-		System.out.print("Do you want to add(a), remove(r), or change(c) an appointment block: ");
-		op = input.next();
+		while (true) {
+			System.out.print("Do you want to add(a), remove(r), change(c) an appointment block, or go back(b): ");
+			op = input.nextLine();
+			switch (op) {
+			case "a":
+			case "A":
+				addNewBlock();
+				break;
+			case "r":
+			case "R":
+				// TODO
+				break;
+			case "c":
+			case "C":
+				// TODO
+				break;
+			case "b":
+			case "B":
+				return;
+			default:
+				System.out.println("Im sorry, that was not a valid input");
+
+			}
+		}
 	}
 
 	public void driver() {
@@ -102,7 +133,7 @@ public class TextUI {
 					break;
 				case "e":
 				case "E":
-					// TODO: edit interface
+					editAppointments();
 					break;
 				case "a":
 				case "A":
