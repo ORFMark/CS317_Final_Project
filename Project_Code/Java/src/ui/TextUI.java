@@ -44,12 +44,15 @@ public class TextUI {
 	}
 
 	private void displayAvalibleAppointments(String courseCode) {
-		String query = String.format("SELECT startTime, endTime from appointments where offeredBy = %D", ID);
+		String query = String
+				.format("SELECT startTime, endTime FROM appointments WHERE (offeredBy = %d AND takenBy IS NULL);", ID);
 		DB.runQuery(query);
 	}
 
 	private void displayTakenAppointments() {
-
+		String query = "SELECT CONCAT(people.firstName, \" \", people.lastName) as student, course, startTime, endTime FROM appointments INNER JOIN people ON people.id = takenBy WHERE offeredby = "
+				+ Integer.toString(ID);
+		DB.printResultSet(DB.runQuery(query));
 	}
 
 	private void removeBlock(LocalDateTime start, LocalDateTime end) {
@@ -57,11 +60,20 @@ public class TextUI {
 	}
 
 	private void displayMyAppointments() {
-
+		String query = "SELECT startTime, endTime, course, CONCAT(people.firstName, \" \", people.lastName) as tutor FROM"
+				+ " appointments INNER JOIN people ON people.ID = offeredBy AND takenBy = " + Integer.toString(ID)
+				+ ";";
+		DB.printResultSet(DB.runQuery(query));
 	}
 
 	private void newAppoitnment() {
 
+	}
+
+	private void editAppointments() {
+		String op = null;
+		System.out.print("Do you want to add(a), remove(r), or change(c) an appointment block: ");
+		op = input.next();
 	}
 
 	public void driver() {
@@ -76,7 +88,7 @@ public class TextUI {
 		userIn = input.nextLine();
 		if (isTutor) {
 			while (!done) {
-				System.out.println(
+				System.out.print(
 						"Do you want to to view taken appointments(t), view your appointments(v), edit appointment hours (e), scedchule an appointment(a), or quit(q): ");
 				userIn = input.nextLine();
 				switch (userIn) {

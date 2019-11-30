@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
@@ -61,6 +62,26 @@ public class DatabaseConnector {
 		}
 		return rs;
 	}	
+	
+	public void printResultSet(ResultSet rs) {
+		int columnsNumber;
+		try {
+			ResultSetMetaData rsmd = rs.getMetaData();
+			columnsNumber = rsmd.getColumnCount();
+			while (rs.next()) {
+			    for (int i = 1; i <= columnsNumber; i++) {
+			        if (i > 1) System.out.print(", ");
+			        String columnValue = rs.getString(i);
+			        System.out.print(rsmd.getColumnName(i) + " " + columnValue );
+			    }
+			    System.out.println("");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
 	public void close() {
 		if(smt != null) {
 			try {
