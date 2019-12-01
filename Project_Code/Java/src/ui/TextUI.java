@@ -64,8 +64,15 @@ public class TextUI {
 		DB.printResultSet(DB.runQuery(query));
 	}
 
-	private void removeBlock(LocalDateTime start, LocalDateTime end) {
-
+	private void removeBlock() {
+		String query = "SELECT ID, startTime, endTime FROM appointments WHERE offeredBy = " + Integer.toString(ID) + " AND takenBy IS NULL";
+		int deadID = -1;
+		DB.printResultSet(DB.runQuery(query));
+		System.out.print("Enter the ID of the block you want to remove: ");
+		deadID = input.nextInt();
+		query = "DELETE FROM appointments WHERE ID = " + Integer.toString(deadID);
+		DB.updateDatabase(query);
+		input.nextLine();
 	}
 
 	private void displayMyAppointments() {
@@ -76,13 +83,23 @@ public class TextUI {
 	}
 
 	private void newAppoitnment() {
-
+		String search = null;
+		String query = null;
+		ResultSet rs = null;
+		System.out.print("Do you want to search based on course(c) or based on Tutor(t):");
+		search = input.nextLine();
+		if(search.equals("t") || search.equals("T")) {
+			System.out.print("Enter the tutor's first name
+			query = "SELECT startTime, endTime, CONCAT(people.firstName, \" \", people.lastName) as tutor FROM appointments INNER JOIN people ON people.ID = appointments.offeredBy WHERE takenBy IS NULL AND people.firstName = \"Mark\" AND people.lastName = \"Burrell\";";
+			rs = DB.runQuery(query);
+			DB.printResultSet(rs);
+		}
 	}
 
 	private void editAppointments() {
 		String op = null;
 		while (true) {
-			System.out.print("Do you want to add(a), remove(r), change(c) an appointment block, or go back(b): ");
+			System.out.print("Do you want to add(a), remove(r), or go back(b): ");
 			op = input.nextLine();
 			switch (op) {
 			case "a":
@@ -91,11 +108,7 @@ public class TextUI {
 				break;
 			case "r":
 			case "R":
-				// TODO
-				break;
-			case "c":
-			case "C":
-				// TODO
+				removeBlock();
 				break;
 			case "b":
 			case "B":
@@ -137,7 +150,7 @@ public class TextUI {
 					break;
 				case "a":
 				case "A":
-					// TODO: new appointment interface
+					newAppoitnment();
 					break;
 				case "q":
 				case "Q":
