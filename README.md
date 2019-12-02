@@ -4,7 +4,7 @@ This is our final project for CS317 at ERAU. The general tasks are:
 # Tasks
 - [x] General Database Layout
 - [ ] Hour Input functions
-- [ ] Scedchuling functions
+- [ ] Scheduling functions
 - [ ] command line GUI
 - [ ] Graphic GUI
 - [ ] Webhosting
