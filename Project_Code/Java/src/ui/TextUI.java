@@ -47,8 +47,8 @@ public class TextUI {
 		startTime = input.nextLine();
 		System.out.print("When do you want the block to end (enter as 24hour time):");
 		endTime = input.nextLine();
-		String query = "INSERT INTO appointments (startTime, endTime, offeredBy, takenBy, course)"
-				+ String.format("VALUES ('%s', '%s', %d, NULL, NULL);", date + " " + startTime, date + " " + endTime, ID);
+		String query = "INSERT INTO appointments (startTime, endTime, offeredBy, takenBy, course)" + String
+				.format("VALUES ('%s', '%s', %d, NULL, NULL);", date + " " + startTime, date + " " + endTime, ID);
 		DB.updateDatabase(query);
 	}
 
@@ -65,7 +65,8 @@ public class TextUI {
 	}
 
 	private void removeBlock() {
-		String query = "SELECT ID, startTime, endTime FROM appointments WHERE offeredBy = " + Integer.toString(ID) + " AND takenBy IS NULL";
+		String query = "SELECT ID, startTime, endTime FROM appointments WHERE offeredBy = " + Integer.toString(ID)
+		+ " AND takenBy IS NULL";
 		int deadID = -1;
 		DB.printResultSet(DB.runQuery(query));
 		System.out.print("Enter the ID of the block you want to remove: ");
@@ -86,15 +87,42 @@ public class TextUI {
 		String search = null;
 		String query = null;
 		ResultSet rs = null;
-		System.out.print("Do you want to search based on course(c) or based on Tutor(t):");
-		search = input.nextLine();
-		if(search.equals("t") || search.equals("T")) {
-			System.out.print("Enter the tutor's first name
-			query = "SELECT startTime, endTime, CONCAT(people.firstName, \" \", people.lastName) as tutor FROM appointments INNER JOIN people ON people.ID = appointments.offeredBy WHERE takenBy IS NULL AND people.firstName = \"Mark\" AND people.lastName = \"Burrell\";";
-			rs = DB.runQuery(query);
-			DB.printResultSet(rs);
+		boolean done = false;
+		while(!done) {
+			System.out.print("Do you want to search based on course(c) or based on Tutor(t):");
+			search = input.nextLine();
+			if (search.equals("t") || search.equals("T")) {
+				System.out.print("Enter the tutor's first name: ");
+				String first = input.next();
+				System.out.print("Enter the tutor's last name: ");
+				String last = input.next();
+				query = "SELECT startTime, endTime, CONCAT(people.firstName, \" \", people.lastName) as tutor FROM appointments INNER JOIN people ON "
+						+ "people.ID = appointments.offeredBy WHERE takenBy IS "
+						+ "NULL AND people.firstName = \"" + first + "\" AND people.lastName = \"" + last + "\";";
+				rs = DB.runQuery(query);
+				DB.printResultSet(rs);
+				search = input.nextLine();
+			} else if (search.equals("c") || search.equals("C")) {
+				System.out.print("Enter the course code with no spaces(EX. CEC220): ");
+				String course = input.nextLine();
+				String Query = String.format("SELECT CONCAT(people.firstName, \" \", people.lastName) as Tutor, people.bio, appointments.startTime, appointments.endTime  "
+						+ "FROM appointments INNER JOIN people ON offeredBy = people.id INNER JOIN tutored on tutored.tutorID = people.id " 
+						+ " INNER JOIN courses ON courses.courseCode = tutored.courseCode WHERE takenBy IS NULL AND courses.courseCode = \"%s\";", course);
+				rs = DB.runQuery(Query);
+				DB.printResultSet(rs);
+			} else {
+				System.out.println("Im sorry, that was invalid input");
+				continue;
+			}
+			System.out.print("Is there a time that works for you in these options (Y/N): ");
+			search = input.nextLine();
+			done = search.equals("y") || search.equals("Y");
 		}
+
+
+
 	}
+
 
 	private void editAppointments() {
 		String op = null;
