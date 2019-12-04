@@ -262,7 +262,7 @@ public class TextUI {
 					break;
 				case "a":
 				case "A":
-					// TODO: new appointment interface
+					newAppoitnment();
 					break;
 				case "q":
 				case "Q":
