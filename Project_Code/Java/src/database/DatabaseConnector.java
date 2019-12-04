@@ -103,6 +103,10 @@ public class DatabaseConnector {
 	}
 
 
+	public Connection getDatabase() {
+		return database;
+	}
+
 	public void close() {
 		if (smt != null) {
 			try {
